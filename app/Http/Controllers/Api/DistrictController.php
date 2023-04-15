@@ -17,8 +17,8 @@ class DistrictController extends Controller
 {
         $districts=District::where('city_id',$request->input('city'))->get();
         if (count($districts)>0) {
-            return ApiResponse::sendResponse(200,"Districts",DistrictResource::collection($districts));
+            return ApiResponse::sendResponse(200,"Districts Retrived Succsessfuly",DistrictResource::collection($districts));
         }
-        return ApiResponse::sendResponse(200,"empty",[]);
+        return ApiResponse::sendResponse(200,"Empty",[]);
     }
 }

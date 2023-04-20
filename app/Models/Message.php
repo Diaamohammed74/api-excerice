@@ -64,7 +64,7 @@ class Message extends Model
     /**
      * fields ordering in filteration
      */
-    const ORDER = ['name', 'email', 'phone'];
+    const ORDER = ['email', 'phone'];
 
     /**
      * Upload Path

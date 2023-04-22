@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\AdResource;
 use Illuminate\Support\Facades\Validator;
+use Spatie\FlareClient\Api;
 
 class AdController extends Controller
 {
@@ -35,6 +36,7 @@ class AdController extends Controller
         }
         return ApiResponse::sendResponse(200,"No ads yet", []);
     }
+        // search about ad title
     public function search(Request $request){
         $word=$request->input('search') ?? null;
         $ad=Ad::when($word!=null , function($query) use($word){
@@ -45,6 +47,7 @@ class AdController extends Controller
         }
         return ApiResponse::sendResponse(200,"Does`t match",[]);
     }
+    //create ads
     public function create(Request $request){
         $validator=Validator::make($request->all(),[
             'title'=>['required','string','max:255'],
@@ -61,4 +64,28 @@ class AdController extends Controller
         return ApiResponse::sendResponse(201,"Ad Created Successfuly",[]);
     }
 
+    public function update(Request $request,$ad_id){
+        $ad=Ad::findOrFail($ad_id);
+        if ($ad->user_id != $request->user()->id) {
+            return ApiResponse::sendResponse(403,"You Are not allowed to take this action",[]);
+        }
+        $validated=Validator::make($request->all(),[
+            'title'=>['required','max:255'],
+            'text'=>['required','max:255'],
+        ]);
+        if ($validated->fails()) {
+            return ApiResponse::sendResponse(422,"Validation Erros",$validated->messages()->all());
+        }
+        $ad->update($request->except('user_id'));
+        return ApiResponse::sendResponse(201,"Ads Updated Successfuly",[]);
+    }
+
+    public function delete(Request $request,$ad_id){
+        $ad=Ad::findOrFail($ad_id);
+        if ($ad->user_id !=$request->user()->id) {
+            return ApiResponse::sendResponse(422,"Sorry You Don`t Have Permissions To Delete this Ad",[]);
+        }
+        $ad->delete();
+        return ApiResponse::sendResponse(200,"Deleted Succesfuly",[]);
+    }
 }

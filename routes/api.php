@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AdController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CityController;
@@ -19,6 +20,13 @@ Route::get('/districts',DistrictController::class);
 Route::prefix('messages')->controller(MessageController::class)->group(function(){
     Route::get('/','index');
     Route::get('search','search');
+});
+Route::prefix('ads')->controller(AdController::class)->group(function(){
+        Route::get('/','index');
+        Route::get('search','search');
+        Route::middleware('auth:sanctum')->group(function(){
+            Route::post('create','create');
+        });
 });
 
 

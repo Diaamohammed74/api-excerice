@@ -23,11 +23,12 @@ class UserController extends Controller
         if ($validator->fails()) {
             return ApiResponse::sendResponse(422,"Registration Validation Errors",$validator->messages()->all());
         }
-        $user= User::create([
+        $user= User::create(
+            [
             'name'=>$request->name,
             'email'=>$request->email,
             'password'=>Hash::make($request->password),
-        ]);
+            ]);
         $data['token']=$user->createToken("ApiExcercise")->plainTextToken;
         $data['user']=$user->name;
         return ApiResponse::sendResponse(201,"User Account Created Successfuly",$data);
@@ -46,10 +47,10 @@ class UserController extends Controller
         $data['username']=$user->name;
         $data['email']=$user->email;
     return ApiResponse::sendResponse(200,"User Logged in Successfuly",$data);
-}
-return ApiResponse::sendResponse(401,"User Credintials doesn`t match ",[]);
-
     }
+    return ApiResponse::sendResponse(401,"User Credintials doesn`t match ",[]);
+
+}
     public function logout(Request $request){
         $request->user()->currentAccessToken()->delete();
         return ApiResponse::sendResponse(200,"Logged out successfuly",[]);

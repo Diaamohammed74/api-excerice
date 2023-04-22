@@ -47,8 +47,7 @@ class MessageController extends Controller
         $messages=Message::when($word !=null , function($query) use ($word)
         {
             $query->where('message','like','%'. $word . '%');
-        })->latest()
-        ->get();
+        })->latest()->get();
         if (count($messages)>0)
         {
             return ApiResponse::sendResponse(200,"Messages",$messages);

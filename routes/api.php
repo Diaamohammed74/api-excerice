@@ -28,6 +28,7 @@ Route::prefix('ads')->controller(AdController::class)->group(function(){
             Route::post('create','create');
             Route::post('update/{ad_id}','update');
             Route::get('delete/{ad_id}','delete');
+            Route::get('myads','myAds');
         });
 });
 
